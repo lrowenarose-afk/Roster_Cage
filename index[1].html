@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Schedule Lookup</title>
+</head>
+<body>
+<h2>Employee Schedule Lookup</h2>
+<input id="idnum" placeholder="Enter ID Number">
+<button onclick="searchID()">Search</button>
+<div id="result"></div>
+
+<script>
+let data=[];
+fetch('data.json').then(r=>r.json()).then(j=>data=j);
+
+function searchID(){
+ const id=document.getElementById('idnum').value.trim();
+ const emp=data.find(x=>x.id===id);
+ const r=document.getElementById('result');
+ if(!emp){ r.innerHTML='<p>ID not found.</p>'; return; }
+
+ let html=`<h3>${emp.name}</h3><p>Position: ${emp.pos}</p>
+ <table border="1" cellpadding="5"><tr><th>Date</th><th>Schedule</th></tr>`;
+ for(const [d,s] of Object.entries(emp.schedule)){
+   html += `<tr><td>${d}</td><td>${s}</td></tr>`;
+ }
+ html += '</table>';
+ r.innerHTML=html;
+}
+</script>
+</body>
+</html>
